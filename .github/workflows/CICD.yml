@@ -30,5 +30,10 @@ jobs:
       - name: Train Model
         run: python src/train.py
 
+      - name: Read accuracy
+        id: read-accuracy
+        run: echo "::set-output name=accuracy::$(cat accuracy.txt)"
+
       - name: Deploy Model
-        run: python src/deploy.py
+        if: steps.read-accuracy.outputs.accuracy > 0.9
+        run: python deploy.py
